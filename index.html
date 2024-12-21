@@ -5,27 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sound Button Page</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: Arial, sans-serif;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 1%;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
             background-color: #f9f9f9;
-            padding: 10px;
+            overflow: hidden;
         }
         button {
-            width: 16vw;
-            height: 18vh;
-            font-size: 14px;
+            width: 18vw;
+            height: 20vh;
+            font-size: 1.2em;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             background-color: #007BFF;
             color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: background-color 0.3s, transform 0.2s;
         }
         button:hover {
@@ -56,10 +64,31 @@
     <button onclick="playSound('sound19.mp3')">Play Sound 19</button>
     <button onclick="playSound('sound20.mp3')">Play Sound 20</button>
 
+
     <script>
+        // Preload audio files
+        const sounds = [
+            'sound1.mp3', 'sound2.mp3', 'sound3.mp3', 'sound4.mp3', 'sound5.mp3',
+            'sound6.mp3', 'sound7.mp3', 'sound8.mp3', 'sound9.mp3', 'sound10.mp3',
+            'sound11.mp3', 'sound12.mp3', 'sound13.mp3', 'sound14.mp3', 'sound15.mp3',
+            'sound16.mp3', 'sound17.mp3', 'sound18.mp3', 'sound19.mp3', 'sound20.mp3'
+        ];
+
+        const audioCache = {};
+        sounds.forEach(sound => {
+            const audio = new Audio(sound);
+            audioCache[sound] = audio;
+        });
+
+        // Stop any playing sound before starting a new one
         function playSound(filename) {
-            const audio = new Audio(filename);
-            audio.play();
+            for (const audio of Object.values(audioCache)) {
+                audio.pause();
+                audio.currentTime = 0; // Reset playback
+            }
+            if (audioCache[filename]) {
+                audioCache[filename].play();
+            }
         }
     </script>
 </body>
