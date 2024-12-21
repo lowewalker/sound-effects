@@ -7,27 +7,30 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             background-color: #f9f9f9;
+            padding: 10px;
         }
         button {
-            padding: 10px 20px;
+            width: 18vw;
+            height: 22vh;
             font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             background-color: #007BFF;
             color: white;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
         }
         button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -35,6 +38,23 @@
     <button onclick="playSound('sound1.mp3')">Play Sound 1</button>
     <button onclick="playSound('sound2.mp3')">Play Sound 2</button>
     <button onclick="playSound('sound3.mp3')">Play Sound 3</button>
+    <button onclick="playSound('sound4.mp3')">Play Sound 4</button>
+    <button onclick="playSound('sound5.mp3')">Play Sound 5</button>
+    <button onclick="playSound('sound6.mp3')">Play Sound 6</button>
+    <button onclick="playSound('sound7.mp3')">Play Sound 7</button>
+    <button onclick="playSound('sound8.mp3')">Play Sound 8</button>
+    <button onclick="playSound('sound9.mp3')">Play Sound 9</button>
+    <button onclick="playSound('sound10.mp3')">Play Sound 10</button>
+    <button onclick="playSound('sound11.mp3')">Play Sound 11</button>
+    <button onclick="playSound('sound12.mp3')">Play Sound 12</button>
+    <button onclick="playSound('sound13.mp3')">Play Sound 13</button>
+    <button onclick="playSound('sound14.mp3')">Play Sound 14</button>
+    <button onclick="playSound('sound15.mp3')">Play Sound 15</button>
+    <button onclick="playSound('sound16.mp3')">Play Sound 16</button>
+    <button onclick="playSound('sound17.mp3')">Play Sound 17</button>
+    <button onclick="playSound('sound18.mp3')">Play Sound 18</button>
+    <button onclick="playSound('sound19.mp3')">Play Sound 19</button>
+    <button onclick="playSound('sound20.mp3')">Play Sound 20</button>
 
     <script>
         function playSound(filename) {
