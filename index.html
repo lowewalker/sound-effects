@@ -53,25 +53,25 @@
 </head>
 <body>
     <button class="green" onclick="playSound('sadtrombones.mp3')">Sad Trombone</button>
-    <button onclick="playSound('sound2.mp3')">Play Sound 2</button>
-    <button onclick="playSound('sound3.mp3')">Play Sound 3</button>
-    <button onclick="playSound('sound4.mp3')">Play Sound 4</button>
-    <button onclick="playSound('sound5.mp3')">Play Sound 5</button>
-    <button onclick="playSound('sound6.mp3')">Play Sound 6</button>
-    <button onclick="playSound('sound7.mp3')">Play Sound 7</button>
-    <button onclick="playSound('sound8.mp3')">Play Sound 8</button>
-    <button onclick="playSound('sound9.mp3')">Play Sound 9</button>
-    <button onclick="playSound('sound10.mp3')">Play Sound 10</button>
-    <button onclick="playSound('sound11.mp3')">Play Sound 11</button>
-    <button onclick="playSound('sound12.mp3')">Play Sound 12</button>
-    <button onclick="playSound('sound13.mp3')">Play Sound 13</button>
-    <button onclick="playSound('sound14.mp3')">Play Sound 14</button>
-    <button onclick="playSound('sound15.mp3')">Play Sound 15</button>
-    <button onclick="playSound('sound16.mp3')">Play Sound 16</button>
-    <button onclick="playSound('sound17.mp3')">Play Sound 17</button>
-    <button onclick="playSound('sound18.mp3')">Play Sound 18</button>
-    <button onclick="playSound('sound19.mp3')">Play Sound 19</button>
-    <button onclick="playSound('sound20.mp3')">Play Sound 20</button>
+    <button id="button2" onclick="playSound('sound2.mp3')">Play Sound 2</button>
+    <button id="button3" onclick="playSound('sound3.mp3')">Play Sound 3</button>
+    <button id="button4" onclick="playSound('sound4.mp3')">Play Sound 4</button>
+    <button id="button5" onclick="playSound('sound5.mp3')">Play Sound 5</button>
+    <button id="button6" onclick="playSound('sound6.mp3')">Play Sound 6</button>
+    <button id="button7" onclick="playSound('sound7.mp3')">Play Sound 7</button>
+    <button id="button8" onclick="playSound('sound8.mp3')">Play Sound 8</button>
+    <button id="button9" onclick="playSound('sound9.mp3')">Play Sound 9</button>
+    <button id="button10" onclick="playSound('sound10.mp3')">Play Sound 10</button>
+    <button id="button11" onclick="playSound('sound11.mp3')">Play Sound 11</button>
+    <button id="button12" onclick="playSound('sound12.mp3')">Play Sound 12</button>
+    <button id="button13" onclick="playSound('sound13.mp3')">Play Sound 13</button>
+    <button id="button14" onclick="playSound('sound14.mp3')">Play Sound 14</button>
+    <button id="button15" onclick="playSound('sound15.mp3')">Play Sound 15</button>
+    <button id="button16" onclick="playSound('sound16.mp3')">Play Sound 16</button>
+    <button id="button17" onclick="playSound('sound17.mp3')">Play Sound 17</button>
+    <button id="button18" onclick="playSound('sound18.mp3')">Play Sound 18</button>
+    <button id="button19" onclick="playSound('sound19.mp3')">Play Sound 19</button>
+    <button id="button20" onclick="playSound('sound20.mp3')">Play Sound 20</button>
 
 
     <script>
@@ -96,6 +96,37 @@
                 audioCache[filename].play();
             }
         }
+        
+        // Assign keyboard shortcuts to buttons
+        document.addEventListener('keydown', (event) => {
+            const keyBindings = {
+                '1': 'button1',
+                '2': 'button2',
+                '3': 'button3',
+                '4': 'button4',
+                '5': 'button5',
+                'q': 'button6',
+                'w': 'button7',
+                'e': 'button8',
+                'r': 'button9',
+                't': 'button10',
+                'a': 'button11',
+                's': 'button12',
+                'd': 'button13',
+                'f': 'button14',
+                'g': 'button15',
+                'z': 'button16',
+                'x': 'button17',
+                'c': 'button18',
+                'v': 'button19',
+                'b': 'button20'
+            };
+
+            const buttonId = keyBindings[event.key];
+            if (buttonId) {
+                document.getElementById(buttonId).click();
+            }
+        });
     </script>
 </body>
 </html>
