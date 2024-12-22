@@ -38,7 +38,7 @@
             transition: background-color 0.3s, transform 0.2s;
             margin: auto;
         }
-        button:hover {
+        button:hover, button.active {
             background-color: #0056b3;
             transform: scale(1.05);
         }
@@ -46,7 +46,7 @@
         .green {
             background-color: #28a745;
         }
-        .green:hover {
+        .green:hover, .green.active {
             background-color: #218838;
         }
     </style>
@@ -85,6 +85,30 @@
             const audio = new Audio(sound);
             audioCache[sound] = audio;
         });
+        
+        // Key bindings for buttons
+        const keyBindings = {
+            '1': 'button1',
+            '2': 'button2',
+            '3': 'button3',
+            '4': 'button4',
+            '5': 'button5',
+            'q': 'button6',
+            'w': 'button7',
+            'e': 'button8',
+            'r': 'button9',
+            't': 'button10',
+            'a': 'button11',
+            's': 'button12',
+            'd': 'button13',
+            'f': 'button14',
+            'g': 'button15',
+            'z': 'button16',
+            'x': 'button17',
+            'c': 'button18',
+            'v': 'button19',
+            'b': 'button20'
+        };
 
         // Stop any playing sound before starting a new one
         function playSound(filename) {
@@ -97,34 +121,21 @@
             }
         }
         
-        // Assign keyboard shortcuts to buttons
+        // Handle keydown and keyup events
         document.addEventListener('keydown', (event) => {
-            const keyBindings = {
-                '1': 'button1',
-                '2': 'button2',
-                '3': 'button3',
-                '4': 'button4',
-                '5': 'button5',
-                'q': 'button6',
-                'w': 'button7',
-                'e': 'button8',
-                'r': 'button9',
-                't': 'button10',
-                'a': 'button11',
-                's': 'button12',
-                'd': 'button13',
-                'f': 'button14',
-                'g': 'button15',
-                'z': 'button16',
-                'x': 'button17',
-                'c': 'button18',
-                'v': 'button19',
-                'b': 'button20'
-            };
-
             const buttonId = keyBindings[event.key];
             if (buttonId) {
-                document.getElementById(buttonId).click();
+                const button = document.getElementById(buttonId);
+                button.classList.add('active');
+                button.click();
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            const buttonId = keyBindings[event.key];
+            if (buttonId) {
+                const button = document.getElementById(buttonId);
+                button.classList.remove('active');
             }
         });
     </script>
