@@ -1,9 +1,9 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sound Button Page</title>
+    <title>Moonball Soundboard</title>
     <style>
         * {
             margin: 0;
@@ -52,40 +52,91 @@ a<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <button id="button1" class="green" onclick="playSound('sadtrombones.mp3')">Sad Trombone</button>
-    <button id="button2" onclick="playSound('mariodeath.mp3')">Mario death</button>
-    <button id="button3" onclick="playSound('mariogameover.mp3')">Mario sad game over</button>
-    <button id="button4" onclick="playSound('mariotimerunningout.mp3')">Mario time running out</button>
-    <button id="button5" onclick="playSound('mariowingame.mp3')">Mario win game</button>
-    <button id="button6" onclick="playSound('sound6.mp3')">Play Sound 6</button>
-    <button id="button7" onclick="playSound('sound7.mp3')">Play Sound 7</button>
-    <button id="button8" onclick="playSound('sound8.mp3')">Play Sound 8</button>
-    <button id="button9" onclick="playSound('sound9.mp3')">Play Sound 9</button>
-    <button id="button10" onclick="playSound('sound10.mp3')">Play Sound 10</button>
-    <button id="button11" onclick="playSound('sound11.mp3')">Play Sound 11</button>
-    <button id="button12" onclick="playSound('sound12.mp3')">Play Sound 12</button>
-    <button id="button13" onclick="playSound('sound13.mp3')">Play Sound 13</button>
-    <button id="button14" onclick="playSound('sound14.mp3')">Play Sound 14</button>
-    <button id="button15" onclick="playSound('sound15.mp3')">Play Sound 15</button>
-    <button id="button16" onclick="playSound('sound16.mp3')">Play Sound 16</button>
-    <button id="button17" onclick="playSound('sound17.mp3')">Play Sound 17</button>
-    <button id="button18" onclick="playSound('sound18.mp3')">Play Sound 18</button>
-    <button id="button19" onclick="playSound('sound19.mp3')">Play Sound 19</button>
-    <button id="button20" onclick="playSound('sound20.mp3')">Play Sound 20</button>
-
+    <button id="button1" class="green" onclick="playSound('sadtrombone.mp3', 'button1')">Sad Trombone</button>
+    <button id="button2" onclick="playSound('mariodeath.mp3', 'button2')">Mario death</button>
+    <button id="button3" onclick="playSound('mariogameover.mp3', 'button3')">Mario sad game over</button>
+    <button id="button4" onclick="playSound('mariotimerunningout.mp3', 'button4')">Mario time running out</button>
+    <button id="button5" onclick="playSound('mariowingame.mp3', 'button5')">Mario win game</button>
+    <button id="button6" onclick="playSound('hornshot.mp3', 'button6')">(Q)<br>Horn Shot</button>
+    <button id="button7" onclick="playSound('singlestring.mp3', 'button7')">Single String</button>
+    <button id="button8" onclick="playSound('vineboom.mp3', 'button8')">Vine boom</button>
+    <button id="button9" onclick="playSound('baseballcharge.mp3', 'button9')">Baseball Charge</button>
+    <button id="button10" onclick="playSound('moonballsong.mp3', 'button10')">Moonball Song</button>
+    <button id="button11" onclick="playSound('slideup.mp3', 'button11')">Slide Up</button>
+    <button id="button12" onclick="playSound('boing.mp3', 'button12')">Boing</button>
+    <button id="button13" onclick="playSound('duhduhduhhh.mp3', 'button13')">Duh Duh Duhhh!</button>
+    <button id="button14" onclick="playSound('sound14.mp3', 'button14')">Play Sound 14</button>
+    <button id="button15" onclick="playSound('sound15.mp3', 'button15')">Play Sound 15</button>
+    <button id="button16" onclick="playSound('sound16.mp3', 'button16')">Play Sound 16</button>
+    <button id="button17" onclick="playSound('sound17.mp3', 'button17')">Play Sound 17</button>
+    <button id="button18" onclick="playSound('sound18.mp3', 'button18')">Play Sound 18</button>
+    <button id="button19" onclick="playSound('sound19.mp3', 'button19')">Play Sound 19</button>
+    <button id="button20" onclick="playSound('sound20.mp3', 'button20')">Play Sound 20</button>
 
     <script>
-        // Preload audio files
+        // Array of all sound files
         const sounds = [
-            'sadtrombones.mp3'
+            'sadtrombone.mp3',
+            'mariodeath.mp3',
+            'mariogameover.mp3',
+            'mariotimerunningout.mp3',
+            'mariowingame.mp3',
+						'hornshot.mp3',
+						'singlestring.mp3',
+						'vineboom.mp3',
+						'baseballcharge.mp3',
+						'moonballsong.mp3',
+						'slideup.mp3',
+						'boing.mp3',
+						'duhduhduhhh.mp3'
+						
         ];
 
-        const audioCache = {};
+        let lastPlayedButton = null; 
+				let currentPlaybackRate = 1.0; 
+				const audioCache = {};  
+
+        // Preload all audio files
         sounds.forEach(sound => {
             const audio = new Audio(sound);
             audioCache[sound] = audio;
         });
-        
+       
+				// Stop all sounds
+				function stopAllSounds() {
+						for (const audio of Object.values(audioCache)) {
+								audio.pause();
+								audio.currentTime = 0; // Reset playback
+						}
+				}
+				
+				// Reset pitch to the original value
+				function resetPitch() {
+						currentPlaybackRate = 1.0;
+				}
+				
+				// Function to play sound and adjust pitch
+				function playSound(filename, buttonId) {
+
+						// If the same button is clicked again, increase the pitch
+						if (lastPlayedButton === buttonId) {
+								currentPlaybackRate *= Math.pow(2, 1 / 12); // Increase pitch by a half-tone each time
+						} else {
+								resetPitch();
+						}
+
+						stopAllSounds();
+
+						const audio = audioCache[filename];
+						if (audio) {
+								audio.preservesPitch = false;
+								audio.playbackRate = currentPlaybackRate;
+								audio.play();
+						}
+
+						lastPlayedButton = buttonId; // Update the last played button
+				}
+				
         // Key bindings for buttons
         const keyBindings = {
             '1': 'button1',
@@ -110,17 +161,6 @@ a<!DOCTYPE html>
             'b': 'button20'
         };
 
-        // Stop any playing sound before starting a new one
-        function playSound(filename) {
-            for (const audio of Object.values(audioCache)) {
-                audio.pause();
-                audio.currentTime = 0; // Reset playback
-            }
-            if (audioCache[filename]) {
-                audioCache[filename].play();
-            }
-        }
-        
         // Handle keydown and keyup events
         document.addEventListener('keydown', (event) => {
             const buttonId = keyBindings[event.key];
