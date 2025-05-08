@@ -118,24 +118,36 @@
 			}
 
 			function playSound(filename, buttonId) {
-				if (!audioCtx) return;
-
+				// If the same button is clicked again, increase the pitch
 				if (lastPlayedButton === buttonId) {
-					currentPlaybackRate *= Math.pow(2, 1 / 12);
+						currentPlaybackRate *= Math.pow(2, 1 / 12); // Increase pitch by a half-tone
 				} else {
-					resetPitch();
+						resetPitch();
 				}
 
-				const buffer = audioBuffers[filename];
-				if (buffer) {
-					const source = audioCtx.createBufferSource();
-					source.buffer = buffer;
-					source.playbackRate.value = currentPlaybackRate;
-					source.connect(audioCtx.destination);
-					source.start();
+				stopAllSounds(); // Stop previous sounds
+
+				const originalAudio = audioCache[filename];
+				if (originalAudio) {
+						// Clone the audio node to allow overlapping and proper restart
+						const newAudio = originalAudio.cloneNode();
+						newAudio.preservesPitch = false;
+						newAudio.playbackRate = currentPlaybackRate;
+						newAudio.play();
+
+						// Save the new audio so we can stop it later
+						audioCache["_currentlyPlaying"] = newAudio;
 				}
 
 				lastPlayedButton = buttonId;
+			}
+			
+			function stopAllSounds() {
+				const current = audioCache["_currentlyPlaying"];
+				if (current) {
+						current.pause();
+						current.currentTime = 0;
+				}
 			}
 
 			// Resume audio context on first touch (iOS requirement)
