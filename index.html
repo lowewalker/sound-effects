@@ -74,117 +74,106 @@
     <button id="button20" onclick="playSound('denied.mp3', 'button20')">Denied!</button>
 
     <script>
-        // Array of all sound files
-        const sounds = [
-            'sadtrombone.mp3',
-            'mariodeath.mp3',
-            'mariogameover.mp3',
-            'mariotimerunningout.mp3',
-            'mariowingame.mp3',
-						'hornshot.mp3',
-						'celebration.mp3',
-						'vineboom.mp3',
-						'baseballcharge.mp3',
-						'moonballsong.mp3',
-						'slideup.mp3',
-						'boing.mp3',
-						'duhduhduhhh.mp3',
-						'runningup.mp3',
-						'runningfast.mp3',
-						'doublekill.mp3',
-						'amazing.mp3',
-						'suspensehit.mp3',
-						'dizzydown.mp3',
-						'denied.mp3'
-						
-        ];
+			const sounds = [
+				'sadtrombone.mp3',
+				'mariodeath.mp3',
+				'mariogameover.mp3',
+				'mariotimerunningout.mp3',
+				'mariowingame.mp3',
+				'hornshot.mp3',
+				'celebration.mp3',
+				'vineboom.mp3',
+				'baseballcharge.mp3',
+				'moonballsong.mp3',
+				'slideup.mp3',
+				'boing.mp3',
+				'duhduhduhhh.mp3',
+				'runningup.mp3',
+				'runningfast.mp3',
+				'doublekill.mp3',
+				'amazing.mp3',
+				'suspensehit.mp3',
+				'dizzydown.mp3',
+				'denied.mp3'
+			];
 
-        let lastPlayedButton = null; 
-				let currentPlaybackRate = 1.0; 
-				const audioCache = {};  
+			let audioCtx;
+			const audioBuffers = {};
+			let lastPlayedButton = null;
+			let currentPlaybackRate = 1.0;
 
-        // Preload all audio files
-        sounds.forEach(sound => {
-            const audio = new Audio(sound);
-            audioCache[sound] = audio;
-        });
-       
-				// Stop all sounds
-				function stopAllSounds() {
-						for (const audio of Object.values(audioCache)) {
-								audio.pause();
-								audio.currentTime = 0; // Reset playback
-						}
+			async function loadSounds() {
+				audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+				for (const sound of sounds) {
+					const response = await fetch(sound);
+					const arrayBuffer = await response.arrayBuffer();
+					const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+					audioBuffers[sound] = audioBuffer;
 				}
-				
-				// Reset pitch to the original value
-				function resetPitch() {
-						currentPlaybackRate = 1.0;
+			}
+
+			function resetPitch() {
+				currentPlaybackRate = 1.0;
+			}
+
+			function playSound(filename, buttonId) {
+				if (!audioCtx) return;
+
+				if (lastPlayedButton === buttonId) {
+					currentPlaybackRate *= Math.pow(2, 1 / 12);
+				} else {
+					resetPitch();
 				}
-				
-				// Function to play sound and adjust pitch
-				function playSound(filename, buttonId) {
 
-						// If the same button is clicked again, increase the pitch
-						if (lastPlayedButton === buttonId) {
-								currentPlaybackRate *= Math.pow(2, 1 / 12); // Increase pitch by a half-tone each time
-						} else {
-								resetPitch();
-						}
-
-						stopAllSounds();
-
-						const audio = audioCache[filename];
-						if (audio) {
-								audio.preservesPitch = false;
-								audio.playbackRate = currentPlaybackRate;
-								audio.play();
-						}
-
-						lastPlayedButton = buttonId; // Update the last played button
+				const buffer = audioBuffers[filename];
+				if (buffer) {
+					const source = audioCtx.createBufferSource();
+					source.buffer = buffer;
+					source.playbackRate.value = currentPlaybackRate;
+					source.connect(audioCtx.destination);
+					source.start();
 				}
-				
-        // Key bindings for buttons
-        const keyBindings = {
-            '1': 'button1',
-            '2': 'button2',
-            '3': 'button3',
-            '4': 'button4',
-            '5': 'button5',
-            'q': 'button6',
-            'w': 'button7',
-            'e': 'button8',
-            'r': 'button9',
-            't': 'button10',
-            'a': 'button11',
-            's': 'button12',
-            'd': 'button13',
-            'f': 'button14',
-            'g': 'button15',
-            'z': 'button16',
-            'x': 'button17',
-            'c': 'button18',
-            'v': 'button19',
-            'b': 'button20'
-        };
 
-        // Handle keydown and keyup events
-        document.addEventListener('keydown', (event) => {
-            const buttonId = keyBindings[event.key];
-            if (buttonId) {
-                const button = document.getElementById(buttonId);
-                button.classList.add('active');
-                button.click();
-            }
-        });
+				lastPlayedButton = buttonId;
+			}
 
-        document.addEventListener('keyup', (event) => {
-            const buttonId = keyBindings[event.key];
-            if (buttonId) {
-                const button = document.getElementById(buttonId);
-                button.classList.remove('active');
-            }
-        });
-    </script>
-</body>
+			// Resume audio context on first touch (iOS requirement)
+			window.addEventListener('touchstart', () => {
+				if (audioCtx && audioCtx.state === 'suspended') {
+					audioCtx.resume();
+				}
+			}, { once: true });
+
+			// Wait until page fully loads to preload sounds
+			window.addEventListener('load', () => {
+				loadSounds();
+			});
+
+			// Your key bindings and button highlights stay the same
+			const keyBindings = {
+				'1': 'button1', '2': 'button2', '3': 'button3', '4': 'button4', '5': 'button5',
+				'q': 'button6', 'w': 'button7', 'e': 'button8', 'r': 'button9', 't': 'button10',
+				'a': 'button11', 's': 'button12', 'd': 'button13', 'f': 'button14', 'g': 'button15',
+				'z': 'button16', 'x': 'button17', 'c': 'button18', 'v': 'button19', 'b': 'button20'
+			};
+
+			document.addEventListener('keydown', (event) => {
+				const buttonId = keyBindings[event.key];
+				if (buttonId) {
+					const button = document.getElementById(buttonId);
+					button.classList.add('active');
+					button.click();
+				}
+			});
+
+			document.addEventListener('keyup', (event) => {
+				const buttonId = keyBindings[event.key];
+				if (buttonId) {
+					const button = document.getElementById(buttonId);
+					button.classList.remove('active');
+				}
+			});
+		</script>
+	</body>
 </html>
